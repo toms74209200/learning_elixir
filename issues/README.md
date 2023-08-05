@@ -19,3 +19,5 @@ Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_do
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at <https://hexdocs.pm/issues>.
 
+<iframe src="./docs/index.html" height="1024"  frameborder="no"  scrolling="no" >
+</iframe>
