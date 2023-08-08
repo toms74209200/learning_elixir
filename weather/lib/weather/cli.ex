@@ -37,4 +37,8 @@ defmodule Weather.Cli do
     usege: weather <city>
     """)
   end
+
+  def process({city}) do
+    Weather.Weather.fetch(city)
+  end
 end
