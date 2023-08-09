@@ -1,4 +1,4 @@
-defmodule Weather.Cli do
+defmodule Weather.CLI do
   @moduledoc """
   Handle the command line parsing and the dispatch to
   the various functions that end up generating a
@@ -36,9 +36,23 @@ defmodule Weather.Cli do
     IO.puts("""
     usege: weather <city>
     """)
+
+    System.halt(0)
   end
 
   def process({city}) do
     Weather.Weather.fetch(city)
+    |> decode_response()
+    |> Weather.Formatter.print_data()
+  end
+
+  def parse_root({root, _}, path) do
+    :xmerl_xpath.string(path, root)
+  end
+
+  def decode_response({:ok, body}), do: body
+
+  def decode_response({:error, error}) do
+    System.halt(2)
   end
 end
