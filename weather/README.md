@@ -1,21 +1,15 @@
 # Weather
 
-**TODO: Add description**
+プログラミングElixir（第2版） 第13章 プロジェクトを構成する OrganizingAProject-6
 
-## Installation
+## Usage
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `weather` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:weather, "~> 0.1.0"}
-  ]
-end
+```bash
+$ mix deps.get
+$ mix escript.build
+$ ./weather KDTO
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/weather>.
-
+## Refs.
+- [プログラミングElixir（第2版） | Ohmsha](https://www.ohmsha.co.jp/book/9784274226373/)
+- [Programming Elixir 1.6: Functional |> Concurrent |> Pragmatic |> Fun by Dave Thomas](https://pragprog.com/titles/elixir16/programming-elixir-1-6/)
