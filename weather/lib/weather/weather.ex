@@ -13,8 +13,6 @@ defmodule Weather.Weather do
     {
       status_code |> check_for_error(),
       body
-      |> :binary.bin_to_list()
-      |> :xmerl_scan.string()
     }
   end
 
