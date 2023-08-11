@@ -40,14 +40,13 @@ defmodule Weather.CLI do
     System.halt(0)
   end
 
+  @tags [:location, :station_id, :weather, :temp_c, :relative_humidity]
   def process({city}) do
     Weather.Weather.fetch(city)
     |> decode_response()
-    |> Weather.Formatter.print_data()
-  end
-
-  def parse_root({root, _}, path) do
-    :xmerl_xpath.string(path, root)
+    |> Weather.XmlParser.parse(@tags)
+    |> Enum.map(fn {tag, value} -> "#{tag}: #{value}, " end)
+    |> IO.puts()
   end
 
   def decode_response({:ok, body}), do: body
