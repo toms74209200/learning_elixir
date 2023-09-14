@@ -16,7 +16,8 @@ defmodule GrepExecutor do
   # 指定したディレクトリ"path"にあるファイルをそれぞれ読み込み, "word"という単語が何個含まれているか数える
   defp grep_exe(path, word) do
     File.ls!(path)
-    |> Enum.map(fn file -> File.read!(file) end)
+    |> Enum.reject(fn path -> File.dir?(path) end)
+    |> Enum.map(fn file -> File.read!(path <> "/" <> file) end)
     |> Enum.map(fn file -> String.split(file, " ") end)
     |> Enum.map(fn file -> Enum.count(file, fn x -> x == word end) end)
     |> Enum.sum()
@@ -26,7 +27,7 @@ end
 defmodule Scheduler do
   def run(num_processes, module, func, to_calculate) do
     1..num_processes
-    |> Enum.map(fn _ -> spawn(module, func, [self()]) end)
+    |> Enum.map(fn _ -> spawn_link(module, func, [self()]) end)
     |> schedule_processes(to_calculate, [])
   end
 
@@ -52,7 +53,7 @@ defmodule Scheduler do
   end
 end
 
-to_process = List.duplicate({".", "cat"}, 20)
+to_process = List.duplicate({"..", "cat"}, 20)
 
 Enum.each(1..10, fn num_processes ->
   {time, result} = :timer.tc(Scheduler, :run, [num_processes, GrepExecutor, :grep, to_process])
