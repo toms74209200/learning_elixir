@@ -1,8 +1,5 @@
-defmodule SequenceTest do
+defmodule SequenceSeverTest do
   use ExUnit.Case
-  doctest Sequence
+  doctest Sequence.Server
 
-  test "greets the world" do
-    assert Sequence.hello() == :world
-  end
 end
