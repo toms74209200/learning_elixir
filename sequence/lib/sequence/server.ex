@@ -1,8 +1,24 @@
 defmodule Sequence.Server do
   use GenServer
 
-  def init(initial_number) do
+  def init(initial_number) when is_integer(initial_number) do
     {:ok, initial_number}
+  end
+
+  def init(stack) when is_list(stack) do
+    {:ok, stack}
+  end
+
+  def handle_call({:stack, item}, _, stack) when is_list(stack) do
+    {:reply, {:stack, item, [item | stack]}, [item | stack]}
+  end
+
+  def handle_call(:pop, _, []) do
+    {:reply, {:pop, :empty, []}, []}
+  end
+
+  def handle_call(:pop, _, [ head | tail ]) do
+    {:reply, {:pop, head, tail}, tail}
   end
 
   def handle_call(:next_number, _from, current_number) do
@@ -45,4 +61,5 @@ defmodule Sequence.Server do
   defp factors(number, divider, l) do
     factors(number, divider + 1, l)
   end
+
 end
