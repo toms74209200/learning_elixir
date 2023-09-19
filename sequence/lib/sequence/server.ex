@@ -17,7 +17,7 @@ defmodule Sequence.Server do
     {:reply, {:pop, :empty, []}, []}
   end
 
-  def handle_call(:pop, _, [ head | tail ]) do
+  def handle_call(:pop, _, [head | tail]) do
     {:reply, {:pop, head, tail}, tail}
   end
 
@@ -27,6 +27,10 @@ defmodule Sequence.Server do
 
   def handle_call({:set_number, new_number}, _from, _current_number) do
     {:reply, new_number, new_number}
+  end
+
+  def handle_cast({:increment_number, delta}, current_number) do
+    {:noreply, current_number + delta}
   end
 
   def handle_call({:factors, number}, _, _) do
@@ -61,5 +65,4 @@ defmodule Sequence.Server do
   defp factors(number, divider, l) do
     factors(number, divider + 1, l)
   end
-
 end
