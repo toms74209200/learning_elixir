@@ -33,6 +33,10 @@ defmodule Sequence.Server do
     {:noreply, current_number + delta}
   end
 
+  def format_status(_reason, [_pdict, state]) do
+    [data: [{'State', "My current state is '#{inspect(state)}', and I'm happy"}]]
+  end
+
   def handle_call({:factors, number}, _, _) do
     {:reply, {:factors_of, number, factors(number)}, []}
   end
