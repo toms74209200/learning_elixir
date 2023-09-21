@@ -13,6 +13,10 @@ defmodule Sequence.Server do
     {:reply, {:stack, item, [item | stack]}, [item | stack]}
   end
 
+  def handle_cast({:push, item}, stack) when is_list(stack) do
+    {:noreply, [item | stack]}
+  end
+
   def handle_call(:pop, _, []) do
     {:reply, {:pop, :empty, []}, []}
   end
