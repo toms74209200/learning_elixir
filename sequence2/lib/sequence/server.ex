@@ -14,6 +14,15 @@ defmodule Sequence.Server do
     {:noreply, Impl.increment(current_number, delta)}
   end
 
+  def handle_cast({:push, item}, stack) do
+    {:noreply, Impl.push(stack, item)}
+  end
+
+  def handle_call(:pop, _, stack) do
+    {item, list} = Impl.pop(stack)
+    {:reply, item, list}
+  end
+
   def format_status(_reason, [_pdict, state]) do
     [data: [{'State', "My current state is '#{inspect(state)}', and I'm happy!"}]]
   end
