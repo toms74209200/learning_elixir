@@ -3,11 +3,11 @@ defmodule Duper.Results do
 
   @me __MODULE__
   def start_link(_) do
-    GenServer.start_link(__MODULE__, [], name: @me)
+    GenServer.start_link(__MODULE__, :no_args, name: @me)
   end
 
   def add_hash_for(path, hash) do
-    GenServer.call(@me, {:add, path, hash})
+    GenServer.cast(@me, {:add, path, hash})
   end
 
   def find_duplicates() do
@@ -20,6 +20,7 @@ defmodule Duper.Results do
 
   def handle_cast({:add, path, hash}, results) do
     results = Map.update(results, hash, [path], fn existing -> [path | existing] end)
+    {:noreply, results}
   end
 
   def handle_call(:find_duplicates, _from, results) do
