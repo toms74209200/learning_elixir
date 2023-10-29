@@ -52,4 +52,9 @@ defimpl Enumerable, for: Midi do
   def reduce(%Midi{content: content}, state, fun) do
     _reduce(content, state, fun)
   end
+
+  def count(midi = %Midi{}) do
+    frame_count = Enum.reduce(midi, 0, fn _, count -> count + 1 end)
+    {:ok, frame_count}
+  end
 end
