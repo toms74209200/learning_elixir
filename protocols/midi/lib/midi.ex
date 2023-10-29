@@ -7,14 +7,14 @@ defmodule Midi do
       length: 0,
       data: <<>>
     )
-  end
 
-  def to_binary(%Midi.Frame{type: type, length: length, data: data}) do
-    <<
-      type::binary-4,
-      length::integer-32,
-      data::binary
-    >>
+    def to_binary(%Midi.Frame{type: type, length: length, data: data}) do
+      <<
+        type::binary-4,
+        length::integer-32,
+        data::binary
+      >>
+    end
   end
 
   def from_file(name) do
@@ -56,5 +56,33 @@ defimpl Enumerable, for: Midi do
   def count(midi = %Midi{}) do
     frame_count = Enum.reduce(midi, 0, fn _, count -> count + 1 end)
     {:ok, frame_count}
+  end
+
+  def member?(%Midi{}, %Midi.Frame{}) do
+    {:error, __MODULE__}
+  end
+
+  def slice(%Midi{}) do
+    {:error, __MODULE__}
+  end
+end
+
+defimpl Collectable, for: Midi do
+  import Bitwise
+
+  def into(%Midi{content: content}) do
+    {
+      content,
+      fn
+        acc, {:cont, frame = %Midi.Frame{}} ->
+          acc <> Midi.Frame.to_binary(frame)
+
+        acc, :done ->
+          %Midi{content: acc}
+
+        _, :halt ->
+          :ok
+      end
+    }
   end
 end
