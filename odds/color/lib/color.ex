@@ -19,13 +19,3 @@ defmodule ColorSignal do
     end
   end
 end
-
-defmodule Example do
-  use ColorSignal
-
-  def rgb, do: IO.inspect(~c{red})
-  def hsb, do: IO.inspect(~c{red}h)
-end
-
-Example.rgb
-Example.hsb
