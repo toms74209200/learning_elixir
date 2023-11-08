@@ -7,14 +7,26 @@ defmodule CsvSigil do
     |> Enum.map(fn line ->
       String.split(line, ",")
     end)
-    |> Enum.map(fn line ->
-      Enum.map(line, fn cell ->
-        case Float.parse(cell) do
-          {float, _} -> float
-          _ -> cell
-        end
-      end)
+    |> exec_cell(fn cell ->
+      case Float.parse(cell) do
+        {float, _} -> float
+        _ -> cell
+      end
     end)
+  end
+
+  defp exec_cell(target, func) do
+    [head | _] = target
+
+    if is_list(head) do
+      Enum.map(target, fn e ->
+        exec_cell(e, func)
+      end)
+    else
+      Enum.map(target, fn e ->
+        func.(e)
+      end)
+    end
   end
 
   defmacro __using__(_opts) do
