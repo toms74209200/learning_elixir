@@ -1,11 +1,19 @@
 defmodule CsvSigil do
-
   def sigil_v(csv, []), do: _v(csv)
 
   defp _v(csv) do
-    String.split(csv, "\n", trim: true)
+    String.replace(csv, " ", "")
+    |> String.split("\n", trim: true)
     |> Enum.map(fn line ->
       String.split(line, ",")
+    end)
+    |> Enum.map(fn line ->
+      Enum.map(line, fn cell ->
+        case Float.parse(cell) do
+          {float, _} -> float
+          _ -> cell
+        end
+      end)
     end)
   end
 
