@@ -1,17 +1,46 @@
 defmodule CsvSigil do
   def sigil_v(csv, []), do: _v(csv)
+  def sigil_v(csv, 'l'), do: _v(csv, :label)
 
   defp _v(csv) do
-    String.replace(csv, " ", "")
-    |> String.split("\n", trim: true)
+    String.split(csv, "\n", trim: true)
     |> Enum.map(fn line ->
       String.split(line, ",")
+    end)
+    |> exec_cell(fn cell ->
+      String.trim(cell)
     end)
     |> exec_cell(fn cell ->
       case Float.parse(cell) do
         {float, _} -> float
         _ -> cell
       end
+    end)
+  end
+
+  defp _v(csv, :label) do
+    [headers | values] =
+      String.split(csv, "\n", trim: true)
+      |> Enum.map(fn line ->
+        String.split(line, ",")
+      end)
+      |> exec_cell(fn cell ->
+        String.trim(cell)
+      end)
+      |> exec_cell(fn cell ->
+        case Float.parse(cell) do
+          {float, _} -> float
+          _ -> cell
+        end
+      end)
+
+    atom_headers =
+      Enum.map(headers, fn header ->
+        String.to_atom(header)
+      end)
+
+    Enum.map(values, fn value ->
+      Enum.zip(atom_headers, value)
     end)
   end
 
